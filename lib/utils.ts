@@ -6,6 +6,7 @@ import {
   FindReferencesReturn,
   OutlineTree,
   Reference,
+  TokenKind,
 } from "types/atom-ide";
 import { GoOutlineResponse } from "types/golang";
 
@@ -66,13 +67,36 @@ export function parseLintErrors(input: string, pathPrefix?: string): [Message[],
   return [messages, others];
 }
 
+// go-outline parsing stuffs
+const goOutlineTypeToAtomIcon: {[x: string]: string; } = {
+  function: "type-function",
+  import: "type-module",
+  package: "type-package",
+  type: "type-class",
+  variable: "type-variable",
+};
+
+const goOutlineTypeToTokenKind: {[x: string]: TokenKind; } = {
+  function: "method",
+  import: "string",
+  package: "string",
+  type: "type",
+  variable: "param",
+};
+
 export function goOutlineToAtomOutline(editor: TextEditor, outline: GoOutlineResponse): OutlineTree {
   return {
     children: outline.children ? outline.children.map((item) => goOutlineToAtomOutline(editor, item)) : [],
     endPosition: editor.getBuffer().positionForCharacterIndex(outline.end - 1),
-    icon: outline.type,
-    plainText: outline.label,
+    icon: goOutlineTypeToAtomIcon[outline.type],
+    representativeName: outline.label,
     startPosition: editor.getBuffer().positionForCharacterIndex(outline.start - 1),
+    tokenizedText: [
+      {
+        kind: goOutlineTypeToTokenKind[outline.type] || "plain",
+        value: outline.label,
+      },
+    ],
   };
 }
 
