@@ -1,0 +1,85 @@
+{
+  "name": "ide-golang",
+  "main": "./lib/main",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "keywords": [],
+  "repository": "https://github.com/atom/ide-golang",
+  "license": "MIT",
+  "scripts": {
+    "lint": "tslint --project ."
+  },
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "atomTranspilers": [
+    {
+      "glob": "**/*.ts",
+      "transpiler": "atom-ts-transpiler",
+      "options": {
+        "cacheKeyFiles": [
+          "package.json"
+        ],
+        "verbose": true
+      }
+    }
+  ],
+  "dependencies": {
+    "@types/atom": "^1.26.0",
+    "atom-linter": "^10.0.0",
+    "atom-ts-transpiler": "^1.5.2",
+    "typescript": "^2.8.3"
+  },
+  "devDependencies": {
+    "tslint": "^5.9.1"
+  },
+  "consumedServices": {
+    "console": {
+      "versions": {
+        "0.1.0": "consumeConsole"
+      }
+    },
+    "linter-indie": {
+      "versions": {
+        "2.0.0": "consumeLinterV2"
+      }
+    },
+    "atom-ide-busy-signal": {
+      "versions": {
+        "0.1.0": "consumeBusySignal"
+      }
+    },
+    "datatip": {
+      "versions": {
+        "0.1.0": "consumeDatatip"
+      }
+    }
+  },
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "provideAutocomplete"
+      }
+    },
+    "definitions": {
+      "versions": {
+        "0.1.0": "provideDefinitions"
+      }
+    },
+    "code-format.file": {
+      "versions": {
+        "0.1.0": "provideFileCodeFormat"
+      }
+    },
+    "find-references": {
+      "versions": {
+        "0.1.0": "provideReferences"
+      }
+    },
+    "outline-view": {
+      "versions": {
+        "0.1.0": "provideOutlines"
+      }
+    }
+  }
+}
