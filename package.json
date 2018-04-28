@@ -2,15 +2,15 @@
   "name": "ide-golang",
   "main": "./lib/main",
   "version": "0.0.0",
-  "description": "A short description of your package",
+  "description": "Go language support for Atom-IDE",
   "keywords": [],
-  "repository": "https://github.com/atom/ide-golang",
+  "repository": "https://github.com/bongnv/atom-ide-golang",
   "license": "MIT",
   "scripts": {
     "lint": "tslint --project ."
   },
   "engines": {
-    "atom": ">=1.0.0 <2.0.0"
+    "atom": ">= 1.19.0 <2.0.0"
   },
   "atomTranspilers": [
     {
