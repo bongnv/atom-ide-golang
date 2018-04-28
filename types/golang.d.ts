@@ -17,6 +17,7 @@ export interface GoGetDocResponse {
 
 export interface GoOutlineResponse {
   label: string;
+  receiverType?: string;
   type: string;
   start: number;
   end: number;

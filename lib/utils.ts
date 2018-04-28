@@ -6,6 +6,7 @@ import {
   FindReferencesReturn,
   OutlineTree,
   Reference,
+  TokenizedText,
   TokenKind,
 } from "types/atom-ide";
 import { GoOutlineResponse } from "types/golang";
@@ -85,18 +86,30 @@ const goOutlineTypeToTokenKind: {[x: string]: TokenKind; } = {
 };
 
 export function goOutlineToAtomOutline(editor: TextEditor, outline: GoOutlineResponse): OutlineTree {
+  const tokenizedText: TokenizedText = [];
+  if (outline.receiverType) {
+    tokenizedText.push(
+      {
+        kind: "param",
+        value: "( " + outline.receiverType + ")",
+      },
+      {
+        kind: "whitespace",
+        value: " ",
+      },
+    );
+  }
+  tokenizedText.push({
+    kind: goOutlineTypeToTokenKind[outline.type] || "plain",
+    value: outline.label,
+  });
   return {
     children: outline.children ? outline.children.map((item) => goOutlineToAtomOutline(editor, item)) : [],
     endPosition: editor.getBuffer().positionForCharacterIndex(outline.end - 1),
     icon: goOutlineTypeToAtomIcon[outline.type],
     representativeName: outline.label,
     startPosition: editor.getBuffer().positionForCharacterIndex(outline.start - 1),
-    tokenizedText: [
-      {
-        kind: goOutlineTypeToTokenKind[outline.type] || "plain",
-        value: outline.label,
-      },
-    ],
+    tokenizedText,
   };
 }
 
