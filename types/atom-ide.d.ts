@@ -1,4 +1,4 @@
-import { Disposable, Grammar, Point, Range, TextEditor } from 'atom';
+import { Disposable, Grammar, Point, Range, TextEditor } from "atom";
 
 export interface OutlineProvider {
   name: string;
