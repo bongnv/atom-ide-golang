@@ -1,4 +1,6 @@
 # ide-golang Atom package
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/bongnv/atom-ide-golang.svg)](https://greenkeeper.io/)
 Go language support for [Atom-IDE](https://github.com/facebook-atom/atom-ide-ui). You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) package to expose the functionality with Atom.
 
 ![ide-golang features](docs/images/ide-golang.png)
