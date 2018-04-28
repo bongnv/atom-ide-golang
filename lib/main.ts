@@ -13,6 +13,7 @@ import {
 import { GoCode } from "./gocode";
 import { GoGetDoc } from "./gogetdoc";
 import { GoImports } from "./goimports";
+import { GoLint } from "./golint";
 import { GoOutline } from "./gooutline";
 import { Guru } from "./guru";
 
@@ -27,6 +28,7 @@ class GoLanguageClient {
   private goImports: GoImports;
   private goOutline: GoOutline;
   private guru: Guru;
+  private golint: GoLint;
 
   constructor() {
     this.name = "Go";
@@ -38,6 +40,7 @@ class GoLanguageClient {
     this.goImports = new GoImports();
     this.goOutline = new GoOutline();
     this.guru = new Guru();
+    this.golint = new GoLint();
   }
 
   public activate() {
@@ -50,6 +53,29 @@ class GoLanguageClient {
     this.subscriptions.add(this.goImports);
     this.subscriptions.add(this.guru);
     this.subscriptions.add(this.goOutline);
+    this.subscriptions.add(this.golint);
+
+    this.subscriptions.add(atom.commands.add(
+      "atom-text-editor[data-grammar~=\"go\"]",
+      "golang:golint", () => {
+        this.golint.lintCheck(atom.workspace.getActiveTextEditor());
+      },
+    ));
+
+    this.subscriptions.add(atom.workspace.observeTextEditors((editor) => {
+      if (!editor || !editor.getBuffer()) {
+        return;
+      }
+
+      const bufferSubscriptions = new CompositeDisposable();
+      bufferSubscriptions.add(editor.getBuffer().onDidSave(() => {
+        this.golint.lintCheck(editor);
+      }));
+      bufferSubscriptions.add(editor.getBuffer().onDidDestroy(() => {
+        bufferSubscriptions.dispose();
+      }));
+      this.subscriptions.add(bufferSubscriptions);
+    }));
   }
 
   public deactivate() {
@@ -71,6 +97,7 @@ class GoLanguageClient {
     });
     this.goImports.setLinter(linter);
     this.goGetDoc.setLinter(linter);
+    this.golint.setLinter(linter);
     this.subscriptions.add(linter);
   }
 

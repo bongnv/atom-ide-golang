@@ -2,11 +2,11 @@ import { Point, TextEditor } from "atom";
 import * as path from "path";
 import { Datatip } from "types/atom-ide";
 import { GoGetDocResponse } from "types/golang";
+import { BaseLintTool } from "./baselinttool";
 import { ExecError } from "./commons";
-import { GoLintTool } from "./golinttool";
 import * as utils from "./utils";
 
-export class GoGetDoc extends GoLintTool {
+export class GoGetDoc extends BaseLintTool {
   public getDatatip(editor: TextEditor, bufferPos: Point, _: MouseEvent | null): Promise<Datatip | null> {
     const m = this.reportBusy("GoGetDoc");
     return new Promise((resolve) => {
@@ -38,8 +38,10 @@ export class GoGetDoc extends GoLintTool {
         });
       }).catch((err: Error) => {
         if (err instanceof ExecError) {
-          const [parsed, unparsed] = utils.parseGoImportsErrors(err.message);
-          this.setAllMessages(parsed);
+          const [messagses, unparsed] = utils.parseLintErrors(err.message);
+          if (messagses.length > 0) {
+            this.setAllMessages(messagses);
+          }
           unparsed.map(this.logTrace.bind(this));
         } else {
           this.logTrace(err);

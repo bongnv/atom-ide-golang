@@ -1,7 +1,7 @@
 import { BufferedProcess, HandleableErrorEvent } from "atom";
 import { BusyMessage, BusySignalOptions, BusySignalService, ConsoleApi } from "types/atom-ide";
 import { SpawnOptions } from "types/golang";
-import { commons } from "./commons";
+import { ExecError, NoopBusyMessage } from "./commons";
 import * as utils from "./utils";
 
 export class GoTool {
@@ -31,7 +31,7 @@ export class GoTool {
     if (this.busyService) {
       return this.busyService.reportBusy(title, options);
     }
-    return new commons.NoopBusyMessage();
+    return new NoopBusyMessage();
   }
 
   protected logTrace(err: any) {
@@ -58,7 +58,7 @@ export class GoTool {
           // console.log('stderr: ' + stderr)
           // console.log('stdout: ' + stdout)
         if (code > 0 || stderr) {
-          reject(new commons.ExecError(stderr));
+          reject(new ExecError(stderr));
           return;
         }
 

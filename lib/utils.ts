@@ -36,9 +36,10 @@ export function getFileArchive(editor: TextEditor): string {
     Buffer.byteLength(fileContents, "utf8") + "\n" + fileContents;
 }
 
-export function parseGoImportsErrors(input: string): [Message[], string[]] {
+export function parseLintErrors(input: string, pathPrefix?: string): [Message[], string[]] {
   const messages: Message[] = [];
   const others: string[] = [];
+  const prefix = pathPrefix || "";
   for (const line of input.split("\n")) {
     if (line.trim().length === 0 ) {
       continue;
@@ -55,7 +56,7 @@ export function parseGoImportsErrors(input: string): [Message[], string[]] {
     messages.push({
       excerpt,
       location: {
-        file,
+        file: path.resolve(prefix, file),
         position: new Range([row - 1, offset - 1], [row - 1, offset - 1]),
       },
       severity: "error",

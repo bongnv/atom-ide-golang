@@ -5,13 +5,14 @@ Go language support for [Atom-IDE](https://github.com/facebook-atom/atom-ide-ui)
 ![Diagnostics with ide-golang](docs/images/diagnostics.png)
 
 ## Features
--   Code Completion (using `gocode`)
--   Code Format (using `goimports`)
--   Diagnostics
--   Document outline (using `go-outline`)
--   Find references (using `guru`)
--   Go to definition (using `guru`)
--   Hover (using `gogetdoc`)
+- Code Completion (using `gocode`)
+- Code Format (using `goimports`)
+- Diagnostics
+- Document outline (using `go-outline`)
+- Find references (using `guru`)
+- Go to definition (using `guru`)
+- Hover (using `gogetdoc`)
+- Lint check after saving (using `golint`)
 
 ## Getting Started
 First, make sure you have Atom 1.19+ installed. Install [atom-ide-ui](https://atom.io/packages/atom-ide-ui) from "Install" in Atom's settings or run:
@@ -31,10 +32,11 @@ go get -u github.com/nsf/gocode
 go get -u github.com/zmb3/gogetdoc
 go get -u golang.org/x/tools/cmd/guru
 go get -u github.com/ramya-rao-a/go-outline
+go get -u golang.org/x/lint/golint
 ```
 
 ## TODO
-- [ ] Golint support
+- [x] Golint support
 - [ ] Configs for GOPATH & tools
 - [ ] CI
 - [ ] Unit tests

@@ -18,7 +18,7 @@ export class Guru extends GoTool {
         const output = JSON.parse(out.toString());
         resolve(utils.jsonToDefinitionQueryResult(output));
       }).catch((err: any) => {
-        this.logWarn(err);
+        this.logTrace(err);
         resolve(null);
       });
     });

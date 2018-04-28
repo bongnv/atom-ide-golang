@@ -1,7 +1,7 @@
 import { IndieDelegate, Message } from "atom/linter";
 import { GoTool } from "./gotool";
 
-export class GoLintTool extends GoTool {
+export class BaseLintTool extends GoTool {
   private linter: IndieDelegate | undefined;
   public setLinter(linter: IndieDelegate) {
     this.linter = linter;
