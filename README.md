@@ -1,6 +1,5 @@
-# ide-golang Atom package
+# ide-golang Atom package &middot; [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac25a49f830e4583befc57c076200c52)](https://www.codacy.com/app/vanbong/atom-ide-golang?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bongnv/atom-ide-golang&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/bongnv/atom-ide-golang.svg?branch=master)](https://travis-ci.org/bongnv/atom-ide-golang) [![Greenkeeper badge](https://badges.greenkeeper.io/bongnv/atom-ide-golang.svg)](https://greenkeeper.io/)
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/bongnv/atom-ide-golang.svg)](https://greenkeeper.io/)
 Go language support for [Atom-IDE](https://github.com/facebook-atom/atom-ide-ui). You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) package to expose the functionality with Atom.
 
 ![ide-golang features](docs/images/ide-golang.png)
@@ -40,7 +39,7 @@ go get -u golang.org/x/lint/golint
 ## TODO
 - [x] Golint support
 - [ ] Configs for GOPATH & tools
-- [ ] CI
+- [x] CI
 - [ ] Unit tests
 - [ ] Compilation support
 
