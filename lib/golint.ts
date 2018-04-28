@@ -11,13 +11,17 @@ export class GoLint extends BaseLintTool {
 
     const m = this.reportBusy("GoLint");
     const dirName = utils.getDirname(editor);
+    const args: string[] = [];
+    const filePath = editor.getPath();
+    if (filePath) {
+      args.push(filePath);
+    }
     return new Promise((resolve) => {
       this.spawn(
         "golint",
-        [],
+        args,
         {
           cwd: dirName,
-          input: editor.getText(),
         },
       ).then((out: string) => {
         const [messages, others] = utils.parseLintErrors(out, dirName);
