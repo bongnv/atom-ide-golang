@@ -1,7 +1,7 @@
 # ide-golang Atom package
 Go language support for [Atom-IDE](https://github.com/facebook-atom/atom-ide-ui). You should also install the [atom-ide-ui](https://atom.io/packages/atom-ide-ui) package to expose the functionality with Atom.
 
-![Hover with ide-golang](docs/images/hover.png)
+![ide-golang features](docs/images/ide-golang.png)
 ![Diagnostics with ide-golang](docs/images/diagnostics.png)
 
 ## Features
