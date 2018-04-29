@@ -18,7 +18,7 @@ export class Guru extends GoTool {
         const output = JSON.parse(out.toString());
         resolve(utils.jsonToDefinitionQueryResult(output));
       }).catch((err: any) => {
-        this.logTrace(err);
+        this.core.logTrace(err);
         resolve(null);
       });
     });
@@ -37,7 +37,7 @@ export class Guru extends GoTool {
       ).then((out: string) => {
         resolve(utils.guruReferrersToAtomReferences(editor, out));
       }).catch((err: any) => {
-        this.logWarn(err);
+        this.core.logWarn(err);
       });
     });
   }

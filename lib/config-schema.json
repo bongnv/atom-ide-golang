@@ -1,0 +1,16 @@
+{
+  "gopath": {
+    "title": "GOPATH",
+    "description": "Specifies the GOPATH to use when no environment variable is set.",
+    "type": "string",
+    "default": "",
+    "order": 1
+  },
+  "goroot": {
+    "title": "GOROOT",
+    "description": "Specifies the GOROOT to use when no environment variable is set.",
+    "type": "string",
+    "default": "",
+    "order": 2
+  }
+}

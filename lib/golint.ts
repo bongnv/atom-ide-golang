@@ -1,15 +1,15 @@
 import { TextEditor } from "atom";
-import { BaseLintTool } from "./baselinttool";
+import { GoTool } from "./gotool";
 import * as utils from "./utils";
 
-export class GoLint extends BaseLintTool {
+export class GoLint extends GoTool {
   public lintCheck(editor: TextEditor | undefined): Promise<void> {
     if (!editor) {
       atom.notifications.addWarning("Ops, no editor is active, cannot find current package to lint");
       return Promise.resolve();
     }
 
-    const m = this.reportBusy("GoLint");
+    const m = this.core.reportBusy("GoLint");
     const dirName = utils.getDirname(editor);
     const args: string[] = [];
     const filePath = editor.getPath();
@@ -25,13 +25,13 @@ export class GoLint extends BaseLintTool {
         },
       ).then((out: string) => {
         const [messages, others] = utils.parseLintErrors(out, dirName);
-        this.setAllMessages(messages);
-        others.map(this.logWarn.bind(this));
+        this.core.setAllMessages(messages);
+        others.map(this.core.logWarn.bind(this));
         m.dispose();
         resolve();
       }).catch((err) => {
         m.dispose();
-        this.logWarn(err);
+        this.core.logWarn(err);
         resolve();
       });
     });

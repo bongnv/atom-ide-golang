@@ -10,6 +10,7 @@ import {
   FindReferencesProvider,
   OutlineProvider,
 } from "types/atom-ide";
+import { Core } from "./core";
 import { GoCode } from "./gocode";
 import { GoGetDoc } from "./gogetdoc";
 import { GoImports } from "./goimports";
@@ -18,6 +19,8 @@ import { GoOutline } from "./gooutline";
 import { Guru } from "./guru";
 
 class GoLanguageClient {
+  public config: any;
+  private core: Core;
   private gammarScopes: string[];
   private name: string;
   private priority: number;
@@ -31,16 +34,18 @@ class GoLanguageClient {
   private golint: GoLint;
 
   constructor() {
-    this.name = "Go";
+    this.config = require("./config-schema.json");
+    this.core = new Core();
     this.gammarScopes = ["source.go"];
+    this.name = "Go";
     this.priority = 1;
     this.subscriptions = new CompositeDisposable();
-    this.goGetDoc = new GoGetDoc();
-    this.goCode = new GoCode();
-    this.goImports = new GoImports();
-    this.goOutline = new GoOutline();
-    this.guru = new Guru();
-    this.golint = new GoLint();
+    this.goGetDoc = new GoGetDoc(this.core);
+    this.goCode = new GoCode(this.core);
+    this.goImports = new GoImports(this.core);
+    this.goOutline = new GoOutline(this.core);
+    this.guru = new Guru(this.core);
+    this.golint = new GoLint(this.core);
   }
 
   public activate() {
@@ -48,13 +53,7 @@ class GoLanguageClient {
       this.subscriptions.dispose();
     }
     this.subscriptions = new CompositeDisposable();
-    this.subscriptions.add(this.goGetDoc);
-    this.subscriptions.add(this.goCode);
-    this.subscriptions.add(this.goImports);
-    this.subscriptions.add(this.guru);
-    this.subscriptions.add(this.goOutline);
-    this.subscriptions.add(this.golint);
-
+    this.subscriptions.add(this.core);
     this.subscriptions.add(atom.commands.add(
       "atom-text-editor[data-grammar~=\"go\"]",
       "golang:golint", () => {
@@ -87,7 +86,7 @@ class GoLanguageClient {
       getDefinition: this.guru.getDefinition.bind(this.guru),
       grammarScopes: this.gammarScopes,
       name: this.name,
-      priority: 20,
+      priority: this.priority,
     };
   }
 
@@ -95,9 +94,7 @@ class GoLanguageClient {
     const linter = register({
       name: this.name,
     });
-    this.goImports.setLinter(linter);
-    this.goGetDoc.setLinter(linter);
-    this.golint.setLinter(linter);
+    this.core.linter = linter;
     this.subscriptions.add(linter);
   }
 
@@ -113,15 +110,12 @@ class GoLanguageClient {
   }
 
   public consumeBusySignal(busyService: BusySignalService) {
-    this.goGetDoc.setBusyService(busyService);
+    this.core.busyService = busyService;
   }
 
   public consumeConsole(createConsole: ConsoleService) {
     const console = createConsole({id: "golang", name: this.name});
-    this.goGetDoc.setConsole(console);
-    this.guru.setConsole(console);
-    this.goCode.setConsole(console);
-    this.goImports.setConsole(console);
+    this.core.console = console;
     this.subscriptions.add(console);
   }
 

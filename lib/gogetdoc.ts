@@ -2,13 +2,13 @@ import { Point, TextEditor } from "atom";
 import * as path from "path";
 import { Datatip } from "types/atom-ide";
 import { GoGetDocResponse } from "types/golang";
-import { BaseLintTool } from "./baselinttool";
 import { ExecError } from "./commons";
+import { GoTool } from "./gotool";
 import * as utils from "./utils";
 
-export class GoGetDoc extends BaseLintTool {
+export class GoGetDoc extends GoTool {
   public getDatatip(editor: TextEditor, bufferPos: Point, _: MouseEvent | null): Promise<Datatip | null> {
-    const m = this.reportBusy("GoGetDoc");
+    const m = this.core.reportBusy("GoGetDoc");
     return new Promise((resolve) => {
       const offset = editor.getBuffer().characterIndexForPosition(bufferPos);
       const filePath = editor.getPath();
@@ -40,11 +40,11 @@ export class GoGetDoc extends BaseLintTool {
         if (err instanceof ExecError) {
           const [messagses, unparsed] = utils.parseLintErrors(err.message);
           if (messagses.length > 0) {
-            this.setAllMessages(messagses);
+            this.core.setAllMessages(messagses);
           }
-          unparsed.map(this.logTrace.bind(this));
+          unparsed.map(this.core.logTrace.bind(this));
         } else {
-          this.logTrace(err);
+          this.core.logTrace(err);
         }
         m.dispose();
         resolve(null);

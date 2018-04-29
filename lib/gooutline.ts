@@ -20,7 +20,7 @@ export class GoOutline extends GoTool {
           outlineTrees: results.map((outline) => utils.goOutlineToAtomOutline(editor, outline)),
         });
       }).catch((err: any) => {
-        this.logWarn(err);
+        this.core.logWarn(err);
         resolve(null);
       });
     });

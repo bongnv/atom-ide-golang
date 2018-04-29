@@ -1,9 +1,9 @@
 import { TextEditor } from "atom";
-import { BaseLintTool } from "./baselinttool";
 import { ExecError } from "./commons";
+import { GoTool } from "./gotool";
 import * as utils from "./utils";
 
-export class GoImports extends BaseLintTool {
+export class GoImports extends GoTool {
   public formatFile(editor: TextEditor, _: Range): Promise<{
     newCursor?: number,
     formatted: string,
@@ -18,17 +18,17 @@ export class GoImports extends BaseLintTool {
           input: editor.getText(),
         },
       ).then((out: string) => {
-        this.clearMessages();
+        this.core.clearMessages();
         resolve({
           formatted: out,
         });
       }).catch((err: any) => {
         if (err instanceof ExecError) {
           const [parsed, unparsed] = utils.parseLintErrors(err.message);
-          this.setAllMessages(parsed);
-          unparsed.map(this.logWarn.bind(this));
+          this.core.setAllMessages(parsed);
+          unparsed.map(this.core.logWarn.bind(this));
         } else {
-          this.logWarn(err);
+          this.core.logWarn(err);
         }
         resolve({
           formatted: editor.getText(),
