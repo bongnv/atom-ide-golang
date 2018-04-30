@@ -62,7 +62,7 @@ class GoLanguageClient {
     ));
 
     this.subscriptions.add(atom.workspace.observeTextEditors((editor) => {
-      if (!editor || !editor.getBuffer()) {
+      if (!editor || !editor.getBuffer() || !this.isEditorSupported(editor)) {
         return;
       }
 
@@ -149,8 +149,12 @@ class GoLanguageClient {
   public provideReferences(): FindReferencesProvider {
     return {
       findReferences: this.guru.getReferences.bind(this.guru),
-      isEditorSupported: (editor: TextEditor) => this.gammarScopes.includes(editor.getGrammar().scopeName),
+      isEditorSupported: this.isEditorSupported.bind(this),
     };
+  }
+
+  private isEditorSupported(editor: TextEditor): boolean {
+    return this.gammarScopes.includes(editor.getGrammar().scopeName);
   }
 }
 

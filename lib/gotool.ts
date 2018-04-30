@@ -5,8 +5,10 @@ import { Core } from "./core";
 
 export class GoTool {
   protected core: Core;
-  constructor(core: Core) {
+  protected name: string;
+  constructor(core: Core, name: string) {
     this.core = core;
+    this.name = name;
   }
 
   protected spawn(command: string, args: string[], opts?: SpawnOptions): Promise<string> {
@@ -37,11 +39,15 @@ export class GoTool {
         stderr: (data: string) => { stderr += data; },
         stdout: (data: string) => { stdout += data; },
       });
-
       bp.onWillThrowError((e: HandleableErrorEvent) => {
         if (e.handle) {
           e.handle();
         }
+
+        // if(e.error && (<any>e.error).code === "ENOENT") {
+        //   utils.promptForMissingTool(this.name);
+        // }
+
         reject(e.error);
       });
 

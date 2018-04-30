@@ -1,9 +1,14 @@
 import { TextEditor } from "atom";
 import { ExecError } from "./commons";
+import { Core } from "./core";
 import { GoTool } from "./gotool";
 import * as utils from "./utils";
 
 export class GoImports extends GoTool {
+  constructor(core: Core) {
+    super(core, "goimports");
+  }
+
   public formatFile(editor: TextEditor, _: Range): Promise<{
     newCursor?: number,
     formatted: string,

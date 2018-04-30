@@ -1,9 +1,14 @@
 import * as path from "path";
 import { AutocompleteRequest, AutocompleteSuggestion } from "types/atom-ide";
 import { GoCodeSuggestion } from "types/golang";
+import { Core } from "./core";
 import { GoTool } from "./gotool";
 
 export class GoCode extends GoTool {
+  constructor(core: Core) {
+    super(core, "gocode");
+  }
+
   public getSuggestions(request: AutocompleteRequest): Promise<AutocompleteSuggestion[] | null> {
     return new Promise((resolve, _) => {
       const {bufferPosition, editor} = request;
@@ -33,7 +38,7 @@ export class GoCode extends GoTool {
          type: src.class,
        })));
       }).catch((err: any) => {
-       this.logTrace(err);
+       this.core.logTrace(err);
        resolve(null);
       });
     });

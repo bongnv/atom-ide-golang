@@ -3,10 +3,15 @@ import * as path from "path";
 import { Datatip } from "types/atom-ide";
 import { GoGetDocResponse } from "types/golang";
 import { ExecError } from "./commons";
+import { Core } from "./core";
 import { GoTool } from "./gotool";
 import * as utils from "./utils";
 
 export class GoGetDoc extends GoTool {
+  constructor(core: Core) {
+    super(core, "gogetdoc");
+  }
+
   public getDatatip(editor: TextEditor, bufferPos: Point, _: MouseEvent | null): Promise<Datatip | null> {
     const m = this.core.reportBusy("GoGetDoc");
     return new Promise((resolve) => {

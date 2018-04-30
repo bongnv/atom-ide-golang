@@ -1,9 +1,14 @@
 import { Point, TextEditor } from "atom";
 import { DefinitionQueryResult, FindReferencesReturn } from "types/atom-ide";
+import { Core } from "./core";
 import { GoTool } from "./gotool";
 import * as utils from "./utils";
 
 export class Guru extends GoTool {
+  constructor(core: Core) {
+    super(core, "guru");
+  }
+
   public getDefinition(editor: TextEditor, point: Point): Promise<DefinitionQueryResult | null> {
     return new Promise((resolve, _) => {
       const offset = editor.getBuffer().characterIndexForPosition(point);
@@ -38,6 +43,7 @@ export class Guru extends GoTool {
         resolve(utils.guruReferrersToAtomReferences(editor, out));
       }).catch((err: any) => {
         this.core.logWarn(err);
+        resolve(null);
       });
     });
   }

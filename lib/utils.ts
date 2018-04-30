@@ -193,3 +193,7 @@ function _getRegexpRangeAtPosition(buffer: TextBuffer, position: Point, wordRege
   });
   return matchData == null ? null : matchData.range;
 }
+
+export function promptForMissingTool(tool: string) {
+  atom.notifications.addWarning("Missing tool: " + tool);
+}
