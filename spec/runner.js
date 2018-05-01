@@ -1,5 +1,8 @@
 // A custom test runner to use latest version of mocha
 // most of them copied from https://github.com/BinaryMuse/atom-mocha-test-runner
+const Mocha = require("mocha");
+const { remote } = require("electron");
+
 module.exports = function({testPaths, buildAtomEnvironment, buildDefaultApplicationDelegate, logFile, headless}){
     return new Promise(resolve => {
       try {
@@ -11,14 +14,11 @@ module.exports = function({testPaths, buildAtomEnvironment, buildDefaultApplicat
           enablePersistence: false
         });
 
-        const Mocha = require('mocha')
-        const mocha = new Mocha()
-        const { remote } = require("electron");
-
+        const mocha = new Mocha();
         if (headless) {
-          mocha.reporter('spec');
+          mocha.reporter("spec");
           console.log = function (...args) {
-            process.stdout.write(require('util').format(...args) +"\n");
+            process.stdout.write(require("util").format(...args) +"\n");
           }
           Object.defineProperties(process, {
             stdout: { value: remote.process.stdout },
@@ -27,7 +27,7 @@ module.exports = function({testPaths, buildAtomEnvironment, buildDefaultApplicat
         }
 
         for (let path of testPaths) {
-          let resolvedFiles = Mocha.utils.lookupFiles(path, ['spec.ts'], true);
+          let resolvedFiles = Mocha.utils.lookupFiles(path, ["spec.ts"], true);
           if (typeof resolvedFiles === "string") {
             resolvedFiles = [resolvedFiles];
           }
