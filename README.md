@@ -40,7 +40,7 @@ go get -u golang.org/x/lint/golint
 - [x] Golint support
 - [ ] Configs for GOPATH & tools
 - [x] CI
-- [ ] Unit tests
+- [x] Unit tests
 - [ ] Compilation support
 
 ## License
