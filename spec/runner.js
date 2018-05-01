@@ -11,10 +11,12 @@ module.exports = function({testPaths, buildAtomEnvironment, buildDefaultApplicat
           window,
           document: window.document,
           configDirPath: process.env.ATOM_HOME,
-          enablePersistence: false
+          enablePersistence: false,
         });
 
-        const mocha = new Mocha();
+        const mocha = new Mocha({
+          timeout: 5000,
+        });
         if (headless) {
           mocha.reporter("spec");
           console.log = function (...args) {
@@ -22,7 +24,7 @@ module.exports = function({testPaths, buildAtomEnvironment, buildDefaultApplicat
           }
           Object.defineProperties(process, {
             stdout: { value: remote.process.stdout },
-            stderr: { value: remote.process.stderr }
+            stderr: { value: remote.process.stderr },
           })
         }
 
@@ -32,15 +34,15 @@ module.exports = function({testPaths, buildAtomEnvironment, buildDefaultApplicat
             resolvedFiles = [resolvedFiles];
           }
           for (let resolvedFile of resolvedFiles) {
-            delete require.cache[resolvedFile]
-            mocha.addFile(resolvedFile)
+            delete require.cache[resolvedFile];
+            mocha.addFile(resolvedFile);
           }
         }
 
         window.runner = mocha.run(resolve);
       } catch (ex) {
         console.error(ex.stack);
-        resolve(1)
+        resolve(1);
       }
     })
 };

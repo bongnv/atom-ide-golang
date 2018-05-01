@@ -11,7 +11,7 @@ import {
 } from "types/atom-ide";
 import { GoOutlineResponse } from "types/golang";
 
-function jsonToDefinitionQueryResult(input: {objpos: string, desc: string}): DefinitionQueryResult | null {
+export function jsonToDefinitionQueryResult(input: {objpos: string, desc: string}): DefinitionQueryResult | null {
   const positions = input.objpos.split(":");
   const row = parseInt(positions[1], 10);
   const col = parseInt(positions[2], 10);
@@ -27,18 +27,18 @@ function jsonToDefinitionQueryResult(input: {objpos: string, desc: string}): Def
   };
 }
 
-function getDirname(editor: TextEditor): string | undefined {
+export function getDirname(editor: TextEditor): string | undefined {
   const filePath = editor.getPath();
   return filePath && path.dirname(filePath);
 }
 
-function getFileArchive(editor: TextEditor): string {
+export function getFileArchive(editor: TextEditor): string {
   const fileContents = editor.getText();
   return editor.getPath() + "\n" +
     Buffer.byteLength(fileContents, "utf8") + "\n" + fileContents;
 }
 
-function parseLintErrors(input: string, pathPrefix?: string): [Message[], string[]] {
+export function parseLintErrors(input: string, pathPrefix?: string): [Message[], string[]] {
   const messages: Message[] = [];
   const others: string[] = [];
   const prefix = pathPrefix || "";
@@ -85,7 +85,7 @@ const goOutlineTypeToTokenKind: {[x: string]: TokenKind; } = {
   variable: "param",
 };
 
-function goOutlineToAtomOutline(editor: TextEditor, outline: GoOutlineResponse): OutlineTree {
+export function goOutlineToAtomOutline(editor: TextEditor, outline: GoOutlineResponse): OutlineTree {
   const tokenizedText: TokenizedText = [];
   if (outline.receiverType) {
     tokenizedText.push(
@@ -113,7 +113,7 @@ function goOutlineToAtomOutline(editor: TextEditor, outline: GoOutlineResponse):
   };
 }
 
-function guruReferrersToAtomReferences(editor: TextEditor, input: string): FindReferencesReturn {
+export function guruReferrersToAtomReferences(editor: TextEditor, input: string): FindReferencesReturn {
   const lines = input.split("\n");
   const results: Reference[] = [];
   let symbolName = "";
@@ -143,7 +143,7 @@ function guruReferrersToAtomReferences(editor: TextEditor, input: string): FindR
   };
 }
 
-function goPathFromPath(filePath: string): string | undefined {
+export function goPathFromPath(filePath: string): string | undefined {
   while (filePath.length > 4) {
     if (path.basename(filePath) === "src") {
       return path.dirname(filePath);
@@ -156,7 +156,7 @@ function goPathFromPath(filePath: string): string | undefined {
 // From https://github.com/t9md/atom-vim-mode-plus
 // It receives a TextEditor and a Point to return Range of the word at
 // current point.
-function getCurrentWordBufferRange(editor: TextEditor, point: Point) {
+export function getCurrentWordBufferRange(editor: TextEditor, point: Point) {
   const nonWordCharacters = "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-…";
   const range = _getRegexpRangeAtPosition(
     editor.getBuffer(),
@@ -194,18 +194,6 @@ function _getRegexpRangeAtPosition(buffer: TextBuffer, position: Point, wordRege
   return matchData == null ? null : matchData.range;
 }
 
-function promptForMissingTool(tool: string) {
+export function promptForMissingTool(tool: string) {
   atom.notifications.addWarning("Missing tool: " + tool);
 }
-
-exports = {
-  getCurrentWordBufferRange,
-  getDirname,
-  getFileArchive,
-  goOutlineToAtomOutline,
-  goPathFromPath,
-  guruReferrersToAtomReferences,
-  jsonToDefinitionQueryResult,
-  parseLintErrors,
-  promptForMissingTool,
-};
