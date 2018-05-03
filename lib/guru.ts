@@ -1,18 +1,19 @@
 import { Point, TextEditor } from "atom";
 import { DefinitionQueryResult, FindReferencesReturn } from "types/atom-ide";
-import { Core } from "./core";
-import { GoTool } from "./gotool";
+import { Core } from "./Core";
 import * as utils from "./utils";
 
-export class Guru extends GoTool {
+export class Guru {
+  private core: Core;
   constructor(core: Core) {
-    super(core, "guru");
+    this.core = core;
   }
 
   public getDefinition(editor: TextEditor, point: Point): Promise<DefinitionQueryResult | null> {
+    const m = this.core.reportBusy("Go to definitions...");
     return new Promise((resolve, _) => {
       const offset = editor.getBuffer().characterIndexForPosition(point);
-      this.spawn(
+      this.core.spawn(
         "guru",
         ["-json", "-modified", "definition", editor.getPath() + ":#" + offset],
         {
@@ -21,9 +22,11 @@ export class Guru extends GoTool {
         },
       ).then((out: string) => {
         const output = JSON.parse(out.toString());
+        m.dispose();
         resolve(utils.jsonToDefinitionQueryResult(output));
       }).catch((err: any) => {
         this.core.logTrace(err);
+        m.dispose();
         resolve(null);
       });
     });
@@ -32,7 +35,7 @@ export class Guru extends GoTool {
   public getReferences(editor: TextEditor, point: Point): Promise<FindReferencesReturn | null> {
     return new Promise((resolve, _) => {
       const offset = editor.getBuffer().characterIndexForPosition(point);
-      this.spawn(
+      this.core.spawn(
         "guru",
         ["-modified", "referrers", editor.getPath() + ":#" + offset],
         {

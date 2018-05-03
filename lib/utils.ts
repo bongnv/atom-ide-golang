@@ -114,6 +114,7 @@ export function goOutlineToAtomOutline(editor: TextEditor, outline: GoOutlineRes
 }
 
 export function guruReferrersToAtomReferences(editor: TextEditor, input: string): FindReferencesReturn {
+  const filePath = editor.getPath();
   const lines = input.split("\n");
   const results: Reference[] = [];
   let symbolName = "";
@@ -123,7 +124,7 @@ export function guruReferrersToAtomReferences(editor: TextEditor, input: string)
       continue;
     }
     const [, file, lineStartStr, colStartStr, lineEndStr, colEndStr] = match;
-    if (symbolName.length === 0 && file === editor.getPath()) {
+    if (symbolName.length === 0 && file === filePath) {
       symbolName = editor.getTextInBufferRange(
         new Range([+ lineStartStr - 1, + colStartStr - 1], [+ lineEndStr - 1, + colEndStr]),
       );
@@ -136,20 +137,25 @@ export function guruReferrersToAtomReferences(editor: TextEditor, input: string)
     });
   }
   return {
-    baseUri: editor.getPath() || "",
+    baseUri: filePath || "",
     referencedSymbolName: symbolName,
     references: results,
     type: "data",
   };
 }
 
-export function goPathFromPath(filePath: string): string | undefined {
+export function goPathFromPath(filePath: string | undefined): string | undefined {
+  if (!filePath) {
+    return undefined;
+  }
+
   while (filePath.length > 4) {
     if (path.basename(filePath) === "src") {
       return path.dirname(filePath);
     }
     filePath = path.dirname(filePath);
   }
+
   return undefined;
 }
 
@@ -192,8 +198,4 @@ function _getRegexpRangeAtPosition(buffer: TextBuffer, position: Point, wordRege
     }
   });
   return matchData == null ? null : matchData.range;
-}
-
-export function promptForMissingTool(tool: string) {
-  atom.notifications.addWarning("Missing tool: " + tool);
 }

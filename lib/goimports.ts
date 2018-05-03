@@ -1,12 +1,12 @@
 import { TextEditor } from "atom";
 import { ExecError } from "./commons";
-import { Core } from "./core";
-import { GoTool } from "./gotool";
+import { Core } from "./Core";
 import * as utils from "./utils";
 
-export class GoImports extends GoTool {
+export class GoImports {
+  private core: Core;
   constructor(core: Core) {
-    super(core, "goimports");
+    this.core = core;
   }
 
   public formatFile(editor: TextEditor, _: Range): Promise<{
@@ -15,7 +15,7 @@ export class GoImports extends GoTool {
   }> {
     return new Promise((resolve) => {
       const filePath = editor.getPath();
-      this.spawn(
+      this.core.spawn(
         "goimports",
         ["-e", "-srcdir=" + filePath],
         {

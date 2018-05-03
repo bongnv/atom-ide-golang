@@ -1,18 +1,18 @@
 import { TextEditor } from "atom";
 import { Outline } from "types/atom-ide";
 import { GoOutlineResponse } from "types/golang";
-import { Core } from "./core";
-import { GoTool } from "./gotool";
+import { Core } from "./Core";
 import * as utils from "./utils";
 
-export class GoOutline extends GoTool {
+export class GoOutline {
+  private core: Core;
   constructor(core: Core) {
-    super(core, "go-outline");
+    this.core = core;
   }
 
   public getOutline(editor: TextEditor): Promise<Outline | null> {
     return new Promise((resolve, _) => {
-      this.spawn(
+      this.core.spawn(
         "go-outline",
         ["-f=" + editor.getPath(), "-modified"],
         {

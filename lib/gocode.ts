@@ -1,12 +1,13 @@
 import * as path from "path";
 import { AutocompleteRequest, AutocompleteSuggestion } from "types/atom-ide";
 import { GoCodeSuggestion } from "types/golang";
-import { Core } from "./core";
-import { GoTool } from "./gotool";
+import { Core } from "./Core";
 
-export class GoCode extends GoTool {
+export class GoCode {
+  private core: Core;
+
   constructor(core: Core) {
-    super(core, "gocode");
+    this.core = core;
   }
 
   public getSuggestions(request: AutocompleteRequest): Promise<AutocompleteSuggestion[] | null> {
@@ -19,7 +20,7 @@ export class GoCode extends GoTool {
       if (!filePath) {
        resolve(null);
       }
-      this.spawn(
+      this.core.spawn(
        "gocode",
        ["-f=json", "autocomplete", String(filePath), String(index)],
        {

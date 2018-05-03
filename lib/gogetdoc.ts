@@ -3,13 +3,14 @@ import * as path from "path";
 import { Datatip } from "types/atom-ide";
 import { GoGetDocResponse } from "types/golang";
 import { ExecError } from "./commons";
-import { Core } from "./core";
-import { GoTool } from "./gotool";
+import { Core } from "./Core";
 import * as utils from "./utils";
 
-export class GoGetDoc extends GoTool {
+export class GoGetDoc {
+  private core: Core;
+
   constructor(core: Core) {
-    super(core, "gogetdoc");
+    this.core = core;
   }
 
   public getDatatip(editor: TextEditor, bufferPos: Point, _: MouseEvent | null): Promise<Datatip | null> {
@@ -17,7 +18,7 @@ export class GoGetDoc extends GoTool {
     return new Promise((resolve) => {
       const offset = editor.getBuffer().characterIndexForPosition(bufferPos);
       const filePath = editor.getPath();
-      this.spawn(
+      this.core.spawn(
         "gogetdoc",
         ["-json", "-modified", "-pos=" + filePath + ":#" + offset],
         {

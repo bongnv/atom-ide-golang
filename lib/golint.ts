@@ -1,11 +1,11 @@
 import { TextEditor } from "atom";
-import { Core } from "./core";
-import { GoTool } from "./gotool";
+import { Core } from "./Core";
 import * as utils from "./utils";
 
-export class GoLint extends GoTool {
+export class GoLint {
+  private core: Core;
   constructor(core: Core) {
-    super(core, "golint");
+    this.core = core;
   }
 
   public lintCheck(editor: TextEditor | undefined): Promise<void> {
@@ -22,7 +22,7 @@ export class GoLint extends GoTool {
       args.push(filePath);
     }
     return new Promise((resolve) => {
-      this.spawn(
+      this.core.spawn(
         "golint",
         args,
         {
