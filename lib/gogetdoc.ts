@@ -2,8 +2,7 @@ import { Point, TextEditor } from "atom";
 import * as path from "path";
 import { Datatip } from "types/atom-ide";
 import { GoGetDocResponse } from "types/golang";
-import { ExecError } from "./commons";
-import { Core } from "./Core";
+import { Core } from "./core";
 import * as utils from "./utils";
 
 export class GoGetDoc {
@@ -43,15 +42,7 @@ export class GoGetDoc {
           range: utils.getCurrentWordBufferRange(editor, bufferPos),
         });
       }).catch((err: Error) => {
-        if (err instanceof ExecError) {
-          const [messagses, unparsed] = utils.parseLintErrors(err.message);
-          if (messagses.length > 0) {
-            this.core.setAllMessages(messagses);
-          }
-          unparsed.map(this.core.logTrace.bind(this));
-        } else {
-          this.core.logTrace(err);
-        }
+        this.core.logTrace(err);
         m.dispose();
         resolve(null);
        });

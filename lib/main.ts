@@ -10,7 +10,7 @@ import {
   FindReferencesProvider,
   OutlineProvider,
 } from "types/atom-ide";
-import { Core } from "./Core";
+import { Core } from "./core";
 import { GoCode } from "./gocode";
 import { GoGetDoc } from "./gogetdoc";
 import { GoImports } from "./goimports";

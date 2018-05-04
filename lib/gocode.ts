@@ -1,7 +1,7 @@
 import * as path from "path";
 import { AutocompleteRequest, AutocompleteSuggestion } from "types/atom-ide";
 import { GoCodeSuggestion } from "types/golang";
-import { Core } from "./Core";
+import { Core } from "./core";
 
 export class GoCode {
   private core: Core;

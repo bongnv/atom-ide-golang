@@ -1,7 +1,7 @@
 import { TextEditor } from "atom";
 import { Outline } from "types/atom-ide";
 import { GoOutlineResponse } from "types/golang";
-import { Core } from "./Core";
+import { Core } from "./core";
 import * as utils from "./utils";
 
 export class GoOutline {

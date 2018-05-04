@@ -1,6 +1,6 @@
 import { Point, TextEditor } from "atom";
 import { DefinitionQueryResult, FindReferencesReturn } from "types/atom-ide";
-import { Core } from "./Core";
+import { Core } from "./core";
 import * as utils from "./utils";
 
 export class Guru {
@@ -46,7 +46,7 @@ export class Guru {
         resolve(utils.guruReferrersToAtomReferences(editor, out));
       }).catch((err: any) => {
         this.core.logWarn(err);
-        resolve(null);
+        resolve(err);
       });
     });
   }

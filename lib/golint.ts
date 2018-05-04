@@ -1,5 +1,5 @@
 import { TextEditor } from "atom";
-import { Core } from "./Core";
+import { Core } from "./core";
 import * as utils from "./utils";
 
 export class GoLint {

@@ -1,6 +1,6 @@
 import { TextEditor } from "atom";
 import { ExecError } from "./commons";
-import { Core } from "./Core";
+import { Core } from "./core";
 import * as utils from "./utils";
 
 export class GoImports {
