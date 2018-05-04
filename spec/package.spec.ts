@@ -11,5 +11,6 @@ describe("ide-golang", () => {
     const packages: any = atom.packages;
     await packages.activatePackage(packagePath);
     expect(atom.packages.isPackageActive("ide-golang")).to.equal(true);
+    expect(atom.config.get("ide-golang.maxConcurrency")).equal(2);
   });
 });

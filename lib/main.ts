@@ -103,7 +103,7 @@ class GoLanguageClient {
       datatip: this.goGetDoc.getDatatip.bind(this.goGetDoc),
       grammarScopes: this.gammarScopes,
       priority: this.priority,
-      providerName: "ide-golang",
+      providerName: this.core.myPackage,
       validForScope: (scopeName: string) => this.gammarScopes.includes(scopeName),
     });
     this.subscriptions.add(datatip);

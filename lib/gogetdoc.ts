@@ -14,7 +14,7 @@ export class GoGetDoc {
   }
 
   public getDatatip(editor: TextEditor, bufferPos: Point, _: MouseEvent | null): Promise<Datatip | null> {
-    const m = this.core.reportBusy("GoGetDoc");
+    const m = this.core.reportBusy("Getting data tip...");
     return new Promise((resolve) => {
       const offset = editor.getBuffer().characterIndexForPosition(bufferPos);
       const filePath = editor.getPath();

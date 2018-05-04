@@ -12,8 +12,8 @@ export class Core {
   public linter: IndieDelegate | undefined;
   public linters: { [k: string]: IndieDelegate; };
   public linterRegister: ((opts: {name: string}) => IndieDelegate) | undefined;
+  public myPackage: string;
 
-  private myPackage: string;
   private concurrentProcess: number;
 
   constructor() {
@@ -31,6 +31,10 @@ export class Core {
   }
 
   public spawn(command: string, args: string[], opts?: SpawnOptions): Promise<string> {
+    if (this.concurrentProcess >= this.getConfig("maxConcurrency")) {
+      return Promise.reject(new Error("Max concurrency exceeded."));
+    }
+
     return (new Promise((resolve, reject) => {
       if (!opts) {
         opts = {};
