@@ -34,9 +34,9 @@ export class GoCode {
          return;
        }
        resolve(results[1].map((src) => ({
-         className: src.type,
          text: src.name,
          type: src.class,
+         description: src.type,
        })));
       }).catch((err: any) => {
        this.core.logTrace(err);
