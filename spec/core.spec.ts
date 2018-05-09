@@ -15,4 +15,12 @@ describe("core", () => {
         expect(err.message).equal("Max concurrency exceeded.");
       });
   });
+
+  it("should prompt missing tool", () => {
+    const core = new Core();
+    const spy = sinon.spy(atom.notifications, "addWarning");
+    core.promptForMissingTool("toolname");
+    expect(spy.callCount).equals(1);
+    expect(spy.args[0][0]).equals("Missing tool: toolname");
+  });
 });
